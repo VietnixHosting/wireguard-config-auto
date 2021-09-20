@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Server config
-MAX_CLIENTS="5"
+MAX_CLIENTS="5" # Number of client config will be generated
 SERVER_IP="192.168.0.10" # CHANGE ME
 SERVER_PORT="56789" # CHANGE ME
 DEVICE="ens192" # CHANGE ME

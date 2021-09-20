@@ -26,3 +26,4 @@ When setup completed, VPN client's configuration file will be found at "/etc/wir
 ## READ MORE
 - https://vietnix.vn/wireguard-la-gi/
 
+Having problem when setup & config Wireguard VPN? Join our Teleram Community (Vietnamese only) at: https://t.me/SinhVienIT for support :)

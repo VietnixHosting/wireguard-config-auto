@@ -24,6 +24,7 @@ function install_centos() {
 	# Disable SElinux
 	if [[ "$DISABLE_SELINUX" -eq 1 ]]
 	then
+		echo "Disable SELinux ..."
 		sed -i "s/SELINUX=enforcing/SELINUX=disabled/g" /etc/selinux/config
 		setenforce 0
 	fi
@@ -31,14 +32,17 @@ function install_centos() {
 	# Disable firewalld
 	if [[ "$DISABLE_FIREWALLD" -eq 1 ]]
 	then
+		echo "Disabling Firewalld ..."
 		systemctl stop firewalld
 		systemctl disable firewalld
 	fi
 
+	match=0
 	# Get CentOS Version
 	eval $(cat /etc/os-release | grep "VERSION_ID=")
 	if [[ "$VERSION_ID" -eq 7 ]]
 	then
+		match=1
 		yum install epel-release elrepo-release -y
 		yum install yum-plugin-elrepo -y
 		yum install kmod-wireguard wireguard-tools -y
@@ -46,8 +50,15 @@ function install_centos() {
 
 	if [[ "$VERSION_ID" -eq 8 ]]
 	then
+		match=1
 		yum install elrepo-release epel-release -y
 		yum install kmod-wireguard wireguard-tools -y
+	fi
+
+	if [[ "$match" -eq 0 ]]
+	then
+		echo "Your OS Version is not supported!"
+		exit
 	fi
 
 	# load module
@@ -59,21 +70,31 @@ function install_ubuntu() {
 }
 
 function install() {
+	match=0
 	if [[ -f /etc/redhat-release ]]
 	then
+		match=1
 		grep -q CentOS /etc/redhat-release && install_centos
 	fi
 
 	if [[ -f /etc/lsb-release ]]
 	then
+		match=1
 		grep -q Ubuntu /etc/lsb-release && install_ubuntu
+	fi
+
+	if [[ "$match" -eq 0 ]]
+	then
+		echo "Your OS is not supported!"
+		exit
 	fi
 
 	# enable ip forwarding
 	if [[ -z "$(grep ip_forward /etc/sysctl.conf)" ]]
 	then
 		echo "net.ipv4.ip_forward=1" >> /etc/sysctl.conf
-		sysctl -w net.ipv4.ip_forward=1 
+		sysctl -w net.ipv4.ip_forward=1
+		sysctl -p
 	fi
 }
 

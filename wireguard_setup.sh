@@ -216,6 +216,11 @@ function main() {
 	gen_server_config
 	gen_client_config
 
+	echo "Keys Generated, copy client config *.conf on /etc/wireguard/keys/ and import to wireguard client to start using"
+
+	# stop service if running
+	wg-quick down wg0
+
 	# start service
 	wg-quick up wg0
 }

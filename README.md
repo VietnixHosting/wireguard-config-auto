@@ -8,7 +8,7 @@ Change these parameters to match your setup
 - MAX_CLIENTS="5" # Number of client config will be generated
 - SERVER_IP="192.168.0.10" # Your server public IP Adress that client will connect to
 - SERVER_PORT="56789" # Define port that VPN Service will listen on (UDP)
-- DEVICE="ens192" # Name of the network interface corresponding to SERVER_IP (used in iptables NAT rule)
+- DEVICE="ens192" # Name of the network interface corresponding to SERVER_IP (used in iptables NAT rule) or you can leave it as blank to auto detect
 - DISABLE_SELINUX="0" # CHANGE to 1: If you want to disable selinux (CentOS)
 - DISALBE_FIREWALLD="0" # CHANGE to 1: If you want to disable Firewalld (CentOS)
 - TUNNEL_ADDR_PREFIX="10.8.0" # Local IP address for client after connect to VPN Server

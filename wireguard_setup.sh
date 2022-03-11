@@ -138,11 +138,10 @@ function gen_server_config() {
 	# Check default gateway device interface name
 	if [[ -z "${DEVICE}" ]];then
 		if [[ "$(ip r | grep default | wc -l)" -gt 1 ]];then
-			echo "WARN: variable DEVICE is missing or you have more than one default route with multiple priority metrics. Please recheck."
+			echo "WARN: variable DEVICE is missing or you have more than one default route with multiple priority metrics. Please recheck and rerun."
 			sleep 5
 		else
 			DEVICE=$(ip r | grep default | head -n 1 | grep -oP '(?<=dev )[^ ]*')
-			echo $DEVICE
 		fi
 	fi
 

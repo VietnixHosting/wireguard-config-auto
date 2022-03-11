@@ -4,7 +4,7 @@
 MAX_CLIENTS="5" # Number of client config will be generated
 SERVER_IP="192.168.0.10" # CHANGE ME
 SERVER_PORT="56789" # CHANGE ME
-DEVICE="ens192" # CHANGE ME
+DEVICE="" # CHANGE ME or leave it as blank to auto detect
 DISABLE_SELINUX="0" # CHANGE to 1: If you want to disable selinux (CentOS)
 DISALBE_FIREWALLD="0" # CHANGE to 1: If you want to disable Firewalld (CentOS)
 TUNNEL_ADDR_PREFIX="10.8.0"
@@ -134,6 +134,17 @@ function gen_server_config() {
 	fi
 
 	server_pri_key=$(cat "${KEYS_DIR}/server_private.key")
+
+	# Check default gateway device interface name
+	if [[ -z "${DEVICE}" ]];then
+		if [[ "$(ip r | grep default | wc -l)" -gt 1 ]];then
+			echo "WARN: variable DEVICE is missing or you have more than one default route with multiple priority metrics. Please recheck."
+			sleep 5
+		else
+			DEVICE=$(ip r | grep default | head -n 1 | grep -oP '(?<=dev )[^ ]*')
+			echo $DEVICE
+		fi
+	fi
 
 	# Server base config
 	cat > $SERVER_CONFIG <<EOF
